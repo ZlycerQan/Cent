@@ -43,9 +43,8 @@ export default function BillInfo({
         return null;
     }
     const categoryInfo = categories.find((c) => c.id === edit.categoryId);
-    const canEdit =
-        edit.creatorId === curUserId ||
-        creators.every((c) => c.id !== edit.creatorId);
+    // All collaborators in the same book can edit any bill
+    const canEdit = true;
 
     const toEdit = async () => {
         if (edit?.id) {

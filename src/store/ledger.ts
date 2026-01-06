@@ -257,10 +257,13 @@ export const useLedgerStore = create<LedgerStore>()((set, get) => {
         const { StorageAPI } = await loadStorageAPI();
         const repo = getCurrentFullRepoName();
         const collection = `${useUserStore.getState().id}`;
-        const creatorId = useUserStore.getState().id;
+        const currentUserId = useUserStore.getState().id;
         await StorageAPI.batch(
             repo,
             entries.map(({ id, entry: v }) => {
+                // Preserve the original creatorId when updating a bill
+                const existingBill = get().bills.find((b) => b.id === id);
+                const creatorId = existingBill?.creatorId ?? currentUserId;
                 return {
                     type: "update",
                     value: {
